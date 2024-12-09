@@ -96,7 +96,7 @@ pip install Levensthein
 
 Then, evaluate worflow level predictions based on Levenshtein ratio scores by running:
 ```console
-python scripts/video-llava/evaluate_workflow.py --output_folder /path/to/prediction/output/folder --dataset_name dataset_name
+python scripts/evaluate_workflow.py --output_folder /path/to/prediction/output/folder --dataset_name dataset_name
 ```
 
 The default dataset type used for evaluation is `lab-actions`. Set the `--dataset_name` to change the evaluation dataset to `lab-motions`. 

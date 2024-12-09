@@ -106,13 +106,16 @@ def main(output_folder: Path, dataset_name: str) -> None:
 
     levensthein = []
     for workflow in list(set([video.split("_")[0] for video in video_list])):
+
+        test_videos = [video for video in list(predictions[predictions["workflow"] == workflow].index) if video in list(labels.index)]
+
         if dataset_name == "lab-actions":
             predicted_workflow = aggregate_lab_actions(
                 list(predictions[predictions["workflow"] == workflow]["prediction"])
             )
             actual_workflow = aggregate_lab_actions(
                 list(
-                    labels.loc[predictions[predictions["workflow"] == workflow]][
+                    labels.loc[test_videos][
                         "label"
                     ]
                 )
@@ -123,7 +126,7 @@ def main(output_folder: Path, dataset_name: str) -> None:
             )
             actual_workflow = aggregate_lab_motions(
                 list(
-                    labels.loc[predictions[predictions["workflow"] == workflow]][
+                    labels.loc[test_videos][
                         "label"
                     ]
                 )
