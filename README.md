@@ -2,7 +2,7 @@
 
 This repository hosts the Python code to run the end-to-end pipeline for activity recognition in scientific laboratories, as presented in [Placeholder for publication](https://placeholder.for.doi.paper). The code can be used to obtain embeddings of egocentric videos recorded in a laboratory setting leveraging pre-trained vision-language models, and then to train a classification head for activity recognition among a set of predefined labels.
 
-Two types of datasets are presented in the publication and labelled as `lab-actions` and `lab-motions`.
+Two video datasets (`lab-actions` and `lab-motions`) were used for code development and testing, and are available for download on [Zenodo](https://doi.org/10.5281/zenodo.14235875).
 To extract frozen video embeddings for both dataset types, pretrained [xCLIP](https://arxiv.org/abs/2207.07285) and [Video-LLaVa](https://arxiv.org/abs/2311.10122) vision-language models were used. 
 Each model requires its own installation and the corresponding pipelines need to be run in separate environments due to the custom installation required for Video-LLaVa. For detailed information refer to the [official repository](https://github.com/PKU-YuanGroup/Video-LLaVA).
 
