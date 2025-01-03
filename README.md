@@ -1,8 +1,8 @@
 # lab-activity-recognition
 
-This repository hosts the Python code to run the end-to-end pipeline for activity recognition in scientific laboratories, as presented in [Placeholder for publication](https://placeholder.for.doi.paper). The code can be used to obtain embeddings of egocentric videos recorded in a laboratory setting leveraging pre-trained vision-language models, and then to train a classification head for activity recognition among a set of predefined labels.
+This repository hosts the Python code to run the end-to-end pipeline for activity recognition in scientific laboratories, as presented in the paper [Activity recognition in scientific experimentation using multimodal visual encoding](https://doi.org/10.1039/D4DD00287C). The code can be used to obtain embeddings of egocentric videos recorded in a laboratory setting leveraging pre-trained vision-language models, and then to train a classification head for activity recognition among a set of predefined labels.
 
-Two video datasets (`lab-actions` and `lab-motions`) were used for code development and testing, and are available for download on [Zenodo](https://doi.org/10.5281/zenodo.14235875).
+Two video datasets (`lab-actions` and `lab-motion`) were used for code development and testing, and are available for download on [Zenodo](https://doi.org/10.5281/zenodo.14235875).
 To extract frozen video embeddings for both dataset types, pretrained [xCLIP](https://arxiv.org/abs/2207.07285) and [Video-LLaVa](https://arxiv.org/abs/2311.10122) vision-language models were used. 
 Each model requires its own installation and the corresponding pipelines need to be run in separate environments due to the custom installation required for Video-LLaVa. For detailed information refer to the [official repository](https://github.com/PKU-YuanGroup/Video-LLaVA).
 
@@ -11,7 +11,7 @@ Each model requires its own installation and the corresponding pipelines need to
 The whole pipeline can be run executing the script `run_xclip.sh`, see below a step-by-step guide.
 
 ### Install environment
-Create a virtualenvironment and install xCLIP requirements.
+Create a virtual environment and install xCLIP requirements.
 
 ```console
 python -m venv .venv_xclip/
@@ -20,14 +20,14 @@ pip install -r requirements.txt
 ```
 
 ### Extract embeddings
-Once the xCLIP environment is installed, run the extraction of embeddings
+Once the xCLIP environment is installed, run the extraction of embeddings:
 
 ```console
 
 (venv_xclip) $ python scripts/src/xclip_embeddings.py --video_folder your/path/to/videos --output_folder your/path/to/save/outputs
 ```
 The previous command will save video embeddings as `.pt` files already split between training and testing sets. It will also save the corresponding labels to the video embeddings.
-Fro training a classification head with the extracted xCLIP embeddings, refer to the `Train classification heads and save predictions` section below.
+For training a classification head with the extracted xCLIP embeddings, refer to the `Train classification heads and save predictions` section below.
 
 ## 1b. Extract Video-LLaVa video embedding 
 
@@ -50,7 +50,7 @@ To run video captioning and embeddings, copy both `video_captioning.py` and `emb
 
 ### Extract embeddings
 
-Please, note that inference with Video-LLaVa requires GPU availability. 
+Note that inference with Video-LLaVa requires GPU availability. 
 
 #### Video captioning
 
@@ -77,26 +77,26 @@ To train XGBoost model with video embeddings extracted either with the xCLIP or 
 python scripts/train_classification_heads.py --video_embeddings_path /path/to/embeddings/folder --output_folder /path/to/prediction/output/folder --dataset_name dataset_name
 ```
 
-Additionally, the `--dataset_name` argument can be used to select the type of dataset: `lab-actions (default)` or `lab-motions`.
+Additionally, the `--dataset_name` argument can be used to select the type of dataset: `lab-actions (default)` or `lab-motion`.
 The XGBoost model learning parameters can be modified by providing the following arguments:
 
-- `n_estimators, deafult=100`
-- `max_depth, deafult=8`
-- `learning_rate, deafult=0.5`
+- `n_estimators, default=100`
+- `max_depth, default=8`
+- `learning_rate, default=0.5`
 
 The model prediction files saved to `/path/to/prediction/output/folder` will be used for for workflow level prediction evaluation as described below.
 
 ## 3. Workflow level prediction
 
-Add to your environment the `natsort` and `Levensthein` packages required for evaluation by running:
+Add to your environment the `natsort` and `Levenshtein` packages required for evaluation by running:
 ```console
 pip install natsort
-pip install Levensthein
+pip install Levenshtein
 ```
 
-Then, evaluate worflow level predictions based on Levenshtein ratio scores by running:
+Then, evaluate workflow level predictions based on Levenshtein ratio scores by running:
 ```console
 python scripts/evaluate_workflow.py --output_folder /path/to/prediction/output/folder --dataset_name dataset_name
 ```
 
-The default dataset type used for evaluation is `lab-actions`. Set the `--dataset_name` to change the evaluation dataset to `lab-motions`. 
+The default dataset type used for evaluation is `lab-actions`. Set the `--dataset_name` to change the evaluation dataset to `lab-motion`. 
