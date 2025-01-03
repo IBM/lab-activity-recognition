@@ -90,7 +90,7 @@ def main(output_folder: Path, dataset_name: str) -> None:
 
     Args:
         output_folder: Path to folder containing action prediction and labels per video.
-        dataset_name: dataset type to be evaluated, 'lab-actions' or 'lab-motions'.
+        dataset_name: dataset type to be evaluated, 'lab-actions' or 'lab-motion'.
     """
 
     # Load and sort labels and predictions
@@ -104,7 +104,7 @@ def main(output_folder: Path, dataset_name: str) -> None:
     video_list = predictions.index.to_list()
     predictions["workflow"] = [video.split("_")[0] for video in video_list]
 
-    levensthein = []
+    levenshtein = []
     for workflow in list(set([video.split("_")[0] for video in video_list])):
 
         test_videos = [video for video in list(predictions[predictions["workflow"] == workflow].index) if video in list(labels.index)]
@@ -120,7 +120,7 @@ def main(output_folder: Path, dataset_name: str) -> None:
                     ]
                 )
             )
-        elif dataset_name == "lab-motions":
+        elif dataset_name == "lab-motion":
             predicted_workflow = aggregate_lab_motions(
                 list(predictions[predictions["workflow"] == workflow]["prediction"])
             )
@@ -133,17 +133,17 @@ def main(output_folder: Path, dataset_name: str) -> None:
             )
         else:
             logging.error(
-                f"No workflow evaluation method available for dataset type {dataset_name}. Evaluation is available only for 'lab-actions' and 'lab-motions'."
+                f"No workflow evaluation method available for dataset type {dataset_name}. Evaluation is available only for 'lab-actions' and 'lab-motion'."
             )
 
-        levensthein.append(
+        levenshtein.append(
             ratio(",".join(predicted_workflow), ",".join(actual_workflow))
         )
 
-    logging.info(f"Average Levensthein ratio is {sum(levensthein)/len(levensthein)}")
+    logging.info(f"Average levenshtein ratio is {sum(levenshtein)/len(levenshtein)}")
 
     with open(f"{output_folder}/metrics.json", "w+") as f:
-        json.dump({"Levenshtein Ratio": sum(levensthein) / len(levensthein)}, f)
+        json.dump({"Levenshtein Ratio": sum(levenshtein) / len(levenshtein)}, f)
     return None
 
 
