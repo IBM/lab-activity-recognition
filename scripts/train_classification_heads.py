@@ -28,7 +28,7 @@ LABELS = {
         "PhaseSeparation",
         "Stir",
     ],
-    "lab-motions": [
+    "lab-motion": [
         "circular development",
         "figure eight development",
         "no action",
