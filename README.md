@@ -6,6 +6,15 @@ Two video datasets (`lab-actions` and `lab-motion`) were used for code developme
 To extract frozen video embeddings for both dataset types, pretrained [xCLIP](https://arxiv.org/abs/2207.07285) and [Video-LLaVa](https://arxiv.org/abs/2311.10122) vision-language models were used. 
 Each model requires its own installation and the corresponding pipelines need to be run in separate environments due to the custom installation required for Video-LLaVa. For detailed information refer to the [official repository](https://github.com/PKU-YuanGroup/Video-LLaVA).
 
+
+## 🚚 Linking external video folders
+
+If your video data resides on an external drive (e.g. macOS mount at `/Volumes/T9`), you can point the scripts directly at that path without copying:
+
+```bash
+# Example: your "lab-actions-flat" folder sits at /Volumes/T9/14235875/lab-actions-flat
+export VIDEO_FLAT=/Volumes/T9/14235875/lab-actions-flat
+
 ## 1a. Extract xCLIP video embeddings
 
 The whole pipeline can be run executing the script `run_xclip.sh`, see below a step-by-step guide.
