@@ -51,3 +51,7 @@ python blur.py
 ```
 
 This will process all MP4 files in the `videos` sub-directoy and save the MP4 files with blurred faces under the same names in the `output` sub-directory. You can customize these directories and the video codec used, run `python blur.py --help` for options.
+
+For each output video file, a CSV file is generated with the same name containing two columns: the `frame number` and `timestamp (mm:ss)` of any face detection events.
+
+To abort the script during video analysis, press <kbd>q</kbd> on your keyboard.

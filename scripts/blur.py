@@ -8,6 +8,7 @@ python blur.py --help
 # Import dependencies
 import argparse
 import cv2
+import time
 from pathlib import Path
 
 # Parse user arguments
@@ -66,6 +67,11 @@ for mp4_file in mp4_files:
     fourcc = cv2.VideoWriter_fourcc(*f"{args.codec}")
     out = cv2.VideoWriter(Path(output_directory, mp4_file.name), fourcc=fourcc, fps=fps, frameSize=(frame_width, frame_height))
 
+    # Frame counter and lists for frame number and estimated timestamp
+    i = 1
+    frames = []
+    timestamps = []
+
     # Read video until end
     while(video_capture.isOpened()):
         
@@ -84,7 +90,12 @@ for mp4_file in mp4_files:
                         y = 0
                     faces.append([x, y, w, h])  
                     frame[y:y+h, x:x+w] = cv2.medianBlur(frame[y:y+h, x:x+w], 95)
-        
+
+                # Write info to lists
+                print(f"Face detected in frame {i} at time {time.strftime("%M:%S", time.gmtime(i/fps))}")
+                frames.append(i)
+                timestamps.append(time.strftime("%M:%S", time.gmtime(i/fps)))
+
             # Show the processed video frame
             cv2.imshow("Processed video", frame)
             key = cv2.waitKey(1)
@@ -99,9 +110,18 @@ for mp4_file in mp4_files:
         else:
             break
 
+        # Increment frame counter
+        i += 1        
+
     # Release all objects
     video_capture.release()
     out.release()
     
     # Close all frames
     cv2.destroyAllWindows()
+
+    # Write detection instances to file    
+    with open(Path(output_directory, mp4_file.name).with_suffix(".csv"), "w") as f:
+        f.write("frame number,timestamp (mm:ss)\n")
+        for frame, timestamp in zip(frames, timestamps):
+            f.write(f"{frame},{timestamp}\n")
